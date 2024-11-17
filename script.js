@@ -1,179 +1,153 @@
-/* General Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+// Data for emojis
+const emojiData = {
+  smileys: ['😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊','😇','🙂','🙃','😌','😍','😘','😗','😙','😚','😋','😜','😝','🤑','🤗','🤔','🤐','🤨','😐','😑','😶','😏','😒','🙄','😬','🤥','😌','😔','😪','🤤','😴'],
+  animals: ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🙈','🙉','🙊','🐒','🐔','🐧','🐦','🐤','🐣','🐥','🦆','🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🐛','🦋','🐌','🐚','🐞'],
+  // Add more categories as needed
+};
+
+let currentCategoryIndex = 0;
+const categories = Object.keys(emojiData);
+
+// Load emojis into the grid
+function loadEmojis() {
+  const grid = document.getElementById('emoji-grid');
+  const category = categories[currentCategoryIndex];
+  document.getElementById('category-name').textContent = category.charAt(0).toUpperCase() + category.slice(1);
+  grid.innerHTML = '';
+  emojiData[category].forEach((emoji) => {
+    const item = document.createElement('div');
+    item.className = 'emoji-item';
+    item.textContent = emoji;
+    item.draggable = true;
+    // Add event listeners for drag and touch events
+    item.addEventListener('dragstart', handleDragStart);
+    item.addEventListener('touchstart', handleTouchStart, { passive: false });
+    grid.appendChild(item);
+  });
 }
 
-/* Prevent scrolling */
-html, body {
-  overflow: hidden;
-  height: 100%;
-}
-
-/* Body Styling */
-body {
-  font-family: Arial, sans-serif;
-  background: #f8f9fa;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-/* Header Styling */
-header {
-  background: #ffffff;
-  border-bottom: 1px solid #ddd;
-  padding: 10px 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-header h1 {
-  font-size: 1.5rem;
-  text-align: center;
-}
-
-.icon-button {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-/* Huiswerk Section */
-#huiswerk-container {
-  padding: 10px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.huiswerk-placeholder {
-  margin: 0 auto;
-  max-width: 300px;
-}
-
-.huiswerk-button {
-  width: 100%;
-  padding: 10px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.huiswerk-button.green {
-  background: #28a745;
-  color: white;
-}
-
-/* Planner Sections */
-#planner {
-  flex-grow: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.sector {
-  flex: 1;
-  margin: 5px 10px;
-  padding: 10px;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.sector-header {
-  text-align: center;
-}
-
-.emoji-placeholders {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 10px;
-}
-
-.emoji-placeholder {
-  width: 50px;
-  height: 50px;
-  background: #f0f0f0;
-  border: 2px dashed #6c757d;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-  font-size: 1.5rem;
-}
-
-.emoji-placeholder.highlight {
-  border-color: #007bff;
-  background-color: #dce6f8;
-  transform: scale(1.05);
-}
-
-.sector-notes {
-  margin-top: 10px;
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-/* Emoji Deck */
-#emoji-deck {
-  background: #ffffff;
-  border-top: 1px solid #ddd;
-  padding: 10px;
-  flex-shrink: 0;
-}
-
-.emoji-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-  gap: 10px;
-  max-height: 100px;
-  overflow-y: auto;
-}
-
-.emoji-item {
-  font-size: 1.5rem;
-  text-align: center;
-  cursor: grab;
-}
-
-/* Disable user selection */
-body, button, input {
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* Prevent zooming on input focus */
-input {
-  font-size: 16px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .emoji-placeholder {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
+function navigateCategory(direction) {
+  if (direction === 'next') {
+    currentCategoryIndex = (currentCategoryIndex + 1) % categories.length;
+  } else {
+    currentCategoryIndex = (currentCategoryIndex - 1 + categories.length) % categories.length;
   }
+  loadEmojis();
+}
 
-  .emoji-item {
-    font-size: 1.2rem;
+document.getElementById('next-category').addEventListener('click', () => navigateCategory('next'));
+document.getElementById('prev-category').addEventListener('click', () => navigateCategory('prev'));
+
+loadEmojis();
+
+// Drag and Drop functionality
+let draggedEmoji = null;
+
+function handleDragStart(e) {
+  draggedEmoji = this.textContent;
+  e.dataTransfer.setData('text/plain', draggedEmoji);
+  // Mobile vibration
+  if (navigator.vibrate) {
+    navigator.vibrate(50);
   }
 }
+
+function handleDragOver(e) {
+  e.preventDefault();
+  this.classList.add('highlight');
+}
+
+function handleDragLeave(e) {
+  this.classList.remove('highlight');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  this.classList.remove('highlight');
+  this.textContent = draggedEmoji;
+  // Magnet attach effect
+  this.classList.add('magnet-effect');
+  setTimeout(() => {
+    this.classList.remove('magnet-effect');
+  }, 300);
+}
+
+function handleTouchStart(e) {
+  e.preventDefault();
+  const touch = e.touches[0];
+  draggedEmoji = this.textContent;
+
+  const ghost = this.cloneNode(true);
+  ghost.style.position = 'absolute';
+  ghost.style.top = `${touch.pageY - 25}px`;
+  ghost.style.left = `${touch.pageX - 25}px`;
+  ghost.id = 'dragging-emoji';
+  ghost.style.pointerEvents = 'none';
+  document.body.appendChild(ghost);
+
+  function moveListener(e) {
+    const touch = e.touches[0];
+    ghost.style.top = `${touch.pageY - 25}px`;
+    ghost.style.left = `${touch.pageX - 25}px`;
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (element && element.classList.contains('emoji-placeholder')) {
+      element.classList.add('highlight');
+    } else {
+      document.querySelectorAll('.emoji-placeholder.highlight').forEach(el => el.classList.remove('highlight'));
+    }
+  }
+
+  function endListener(e) {
+    const touch = e.changedTouches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (element && element.classList.contains('emoji-placeholder')) {
+      element.textContent = draggedEmoji;
+      // Magnet attach effect
+      element.classList.add('magnet-effect');
+      setTimeout(() => {
+        element.classList.remove('magnet-effect');
+      }, 300);
+    }
+    ghost.remove();
+    document.removeEventListener('touchmove', moveListener);
+    document.removeEventListener('touchend', endListener);
+    document.querySelectorAll('.emoji-placeholder.highlight').forEach(el => el.classList.remove('highlight'));
+  }
+
+  document.addEventListener('touchmove', moveListener, { passive: false });
+  document.addEventListener('touchend', endListener, { passive: false });
+
+  // Mobile vibration
+  if (navigator.vibrate) {
+    navigator.vibrate(50);
+  }
+}
+
+const placeholders = document.querySelectorAll('.emoji-placeholder');
+placeholders.forEach(placeholder => {
+  placeholder.addEventListener('dragover', handleDragOver);
+  placeholder.addEventListener('dragleave', handleDragLeave);
+  placeholder.addEventListener('drop', handleDrop);
+});
+
+// Reset button functionality
+document.getElementById('reset-button').addEventListener('click', () => {
+  placeholders.forEach(placeholder => {
+    placeholder.textContent = '';
+  });
+});
+
+// Huiswerk button functionality
+const huiswerkButton = document.getElementById('huiswerk-button');
+huiswerkButton.addEventListener('click', () => {
+  huiswerkButton.classList.toggle('green');
+});
+
+// Live time update
+function updateTime() {
+  const now = new Date();
+  const timeString = now.toLocaleTimeString();
+  document.getElementById('live-time').textContent = timeString;
+}
+setInterval(updateTime, 1000);
+updateTime();
