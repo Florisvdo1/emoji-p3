@@ -1,179 +1,89 @@
-/* General Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Prevent scrolling */
-html, body {
-  overflow: hidden;
-  height: 100%;
-}
-
-/* Body Styling */
-body {
-  font-family: Arial, sans-serif;
-  background: #f8f9fa;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-/* Header Styling */
-header {
-  background: #ffffff;
-  border-bottom: 1px solid #ddd;
-  padding: 10px 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-header h1 {
-  font-size: 1.5rem;
-  text-align: center;
-}
-
-.icon-button {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-/* Huiswerk Section */
-#huiswerk-container {
-  padding: 10px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.huiswerk-placeholder {
-  margin: 0 auto;
-  max-width: 300px;
-}
-
-.huiswerk-button {
-  width: 100%;
-  padding: 10px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.huiswerk-button.green {
-  background: #28a745;
-  color: white;
-}
-
-/* Planner Sections */
-#planner {
-  flex-grow: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.sector {
-  flex: 1;
-  margin: 5px 10px;
-  padding: 10px;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.sector-header {
-  text-align: center;
-}
-
-.emoji-placeholders {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 10px;
-}
-
-.emoji-placeholder {
-  width: 50px;
-  height: 50px;
-  background: #f0f0f0;
-  border: 2px dashed #6c757d;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-  font-size: 1.5rem;
-}
-
-.emoji-placeholder.highlight {
-  border-color: #007bff;
-  background-color: #dce6f8;
-  transform: scale(1.05);
-}
-
-.sector-notes {
-  margin-top: 10px;
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-/* Emoji Deck */
-#emoji-deck {
-  background: #ffffff;
-  border-top: 1px solid #ddd;
-  padding: 10px;
-  flex-shrink: 0;
-}
-
-.emoji-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-  gap: 10px;
-  max-height: 100px;
-  overflow-y: auto;
-}
-
-.emoji-item {
-  font-size: 1.5rem;
-  text-align: center;
-  cursor: grab;
-}
-
-/* Disable user selection */
-body, button, input {
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* Prevent zooming on input focus */
-input {
-  font-size: 16px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .emoji-placeholder {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-  }
-
-  .emoji-item {
-    font-size: 1.2rem;
-  }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Prevent user zooming and set initial scale -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Emoji Drag-and-Drop Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div id="header-container">
+      <div class="header-left">
+        <span id="live-time">--:--:--</span>
+      </div>
+      <div class="header-center">
+        <h1>Emoji Planner</h1>
+      </div>
+      <div class="header-right">
+        <button id="reset-button" class="icon-button" aria-label="Reset Planner">Reset</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section id="huiswerk-container">
+      <div class="huiswerk-placeholder">
+        <button id="huiswerk-button" class="huiswerk-button">
+          Huiswerk gedaan? Druk op de knop
+        </button>
+      </div>
+    </section>
+    <div id="planner">
+      <!-- Morning Section -->
+      <section id="morning-sector" class="sector">
+        <header class="sector-header">
+          <h2>Morning</h2>
+        </header>
+        <div class="emoji-placeholders">
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+        </div>
+        <input type="text" placeholder="Notes for Morning" class="sector-notes">
+      </section>
+      <!-- Midday Section -->
+      <section id="midday-sector" class="sector">
+        <header class="sector-header">
+          <h2>Midday</h2>
+        </header>
+        <div class="emoji-placeholders">
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+        </div>
+        <input type="text" placeholder="Notes for Midday" class="sector-notes">
+      </section>
+      <!-- Evening Section -->
+      <section id="evening-sector" class="sector">
+        <header class="sector-header">
+          <h2>Evening</h2>
+        </header>
+        <div class="emoji-placeholders">
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+          <div class="emoji-placeholder"></div>
+        </div>
+        <input type="text" placeholder="Notes for Evening" class="sector-notes">
+      </section>
+    </div>
+  </main>
+  <footer>
+    <div id="emoji-deck">
+      <div class="emoji-grid" id="emoji-grid"></div>
+      <div class="emoji-navigation">
+        <button id="prev-category" aria-label="Previous Emoji Category">◀️</button>
+        <span id="category-name"></span>
+        <button id="next-category" aria-label="Next Emoji Category">▶️</button>
+      </div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
